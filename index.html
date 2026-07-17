@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RetroArch Web NES (Nestopia Core 6502 Assembly Edition)</title>
+    <link rel="stylesheet" href="css/retroarch_nes.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- Floating Exit Fullscreen Button for RetroArch Overlay Mode -->
+        <button id="btn-exit-fullscreen">✕ EXIT FULLSCREEN</button>
+
+        <!-- RetroArch Top Header -->
+        <header class="ra-header">
+            <div class="ra-brand">
+                <div class="ra-logo">NST</div>
+                <div class="ra-title">RetroArch Web NES (Nestopia Core)</div>
+            </div>
+            <div class="ra-status-badge">
+                <span class="status-dot"></span>
+                <span id="fps-live-status">NESTOPIA CORE • 60 FPS</span>
+            </div>
+        </header>
+
+        <!-- Main NES Screen Canvas Stage -->
+        <div class="screen-wrapper">
+            <canvas id="nes-canvas" width="256" height="240"></canvas>
+            <div class="crt-overlay"></div>
+            <div class="crt-vignette"></div>
+            <div id="osd-toast">WELCOME TO RETROARCH NESTOPIA CORE</div>
+        </div>
+
+        <!-- Hotbar Menu Actions & FPS Power Saver -->
+        <div class="quick-hotbar">
+            <button id="btn-save" class="hotbar-btn">💾 SAVE</button>
+            <button id="btn-load" class="hotbar-btn">📂 LOAD</button>
+            <button id="btn-ff" class="hotbar-btn">⚡ 2X SPEED</button>
+            <button id="btn-pause" class="hotbar-btn">⏸️ PAUSE</button>
+            <button id="btn-crt" class="hotbar-btn active">📺 CRT</button>
+            <button id="btn-mute" class="hotbar-btn">🔊 AUDIO</button>
+            <button id="btn-asm" class="hotbar-btn">⚙️ 6502 ASM</button>
+            <button id="btn-full" class="hotbar-btn">⛶ FULL</button>
+
+            <!-- FPS Limiter & Power Saver Controls -->
+            <div class="fps-control-box">
+                <span>🔋 FPS LIMIT:</span>
+                <input type="range" id="fps-slider" class="fps-slider" min="15" max="144" step="5" value="60">
+                <span id="fps-val" class="fps-badge">60 FPS</span>
+                <button id="btn-fps-unlimited" class="hotbar-btn" style="padding: 4px 8px; font-size: 11px;">🚀 ∞ UNLOCKED</button>
+            </div>
+
+            <select id="game-select" class="hotbar-btn" style="background: #1e232a;">
+                <option value="game1">🎮 NES 6502 Quest (Built-in Game)</option>
+                <option value="demo2">🔊 APU Sound & Chiptune Synth</option>
+            </select>
+
+            <label class="hotbar-btn" style="cursor: pointer;">
+                📁 LOAD .NES
+                <input type="file" id="rom-file-input" accept=".nes" style="display: none;">
+            </label>
+        </div>
+
+        <!-- RetroArch Style Mobile Touch Controller Overlay -->
+        <div class="touch-overlay">
+            <!-- Left D-PAD Cluster -->
+            <div class="dpad-container">
+                <div id="btn-dpad-up" class="dpad-btn dpad-up">▲</div>
+                <div id="btn-dpad-down" class="dpad-btn dpad-down">▼</div>
+                <div id="btn-dpad-left" class="dpad-btn dpad-left">◄</div>
+                <div id="btn-dpad-right" class="dpad-btn dpad-right">►</div>
+                <div class="dpad-center"></div>
+            </div>
+
+            <!-- Center Select & Start Buttons -->
+            <div class="center-pills">
+                <button id="btn-select" class="pill-btn">SELECT</button>
+                <button id="btn-start" class="pill-btn">START</button>
+            </div>
+
+            <!-- Right Action Buttons Cluster -->
+            <div class="action-cluster">
+                <div class="turbo-row">
+                    <button id="btn-turbo-b" class="nes-btn turbo">TB</button>
+                    <button id="btn-turbo-a" class="nes-btn turbo">TA</button>
+                </div>
+                <div class="btn-row">
+                    <button id="btn-b" class="nes-btn">B</button>
+                    <button id="btn-a" class="nes-btn">A</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6502 Assembly Code Inspector & Assembler Modal -->
+    <div id="asm-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">6502 Assembly IDE & CPU Registers Monitor</div>
+                <button id="close-asm-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cpu-registers-box">
+                    <span id="reg-a" class="reg-tag">A: $00</span>
+                    <span id="reg-x" class="reg-tag">X: $00</span>
+                    <span id="reg-y" class="reg-tag">Y: $00</span>
+                    <span id="reg-pc" class="reg-tag">PC: $C000</span>
+                    <span id="reg-sp" class="reg-tag">SP: $FD</span>
+                </div>
+
+                <textarea id="asm-textarea" class="asm-editor" spellcheck="false"></textarea>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="btn-compile-run" class="hotbar-btn active" style="padding: 10px 20px; font-size: 14px;">
+                        🔨 BUILD 6502 ROM & RUN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nes_cpu.js"></script>
+    <script src="js/nes_ppu.js"></script>
+    <script src="js/nes_apu.js"></script>
+    <script src="js/nes_system.js"></script>
+    <script src="js/nestopia_core.js"></script>
+    <script src="js/asm6502.js"></script>
+    <script src="js/built_in_roms.js"></script>
+    <script src="js/retroarch_ui.js"></script>
+</body>
+</html>

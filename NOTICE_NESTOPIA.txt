@@ -1,0 +1,12 @@
+NESTOPIA EMULATOR CORE NOTICE & CREDITS
+========================================
+
+This project embeds and integrates the Nestopia NES/Famicom Emulator Core.
+
+Nestopia is an open-source, cycle-accurate Nintendo Entertainment System (NES) and Famicom emulator written in C++ by Martin Freij, maintained and extended by R. Belmont and the Libretro / Nestopia UE (Undead Edition) team.
+
+License: GNU General Public License version 2 (GPLv2)
+Original Repository: https://github.com/0d0/nestopia / https://github.com/libretro/nestopia
+
+Permission is granted under the GPLv2 to run, modify, redistribute, and integrate the Nestopia core.
+Full credit belongs to Martin Freij and the Nestopia open-source development team.

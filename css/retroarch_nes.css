@@ -1,0 +1,540 @@
+/* RetroArch NES Assembly Web App Styles */
+:root {
+    --bg-dark: #121418;
+    --card-bg: rgba(25, 28, 36, 0.85);
+    --ra-accent: #3b82f6;
+    --ra-green: #10b981;
+    --ra-red: #ef4444;
+    --ra-nes-red: #d90429;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --border-color: rgba(255, 255, 255, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    background-image: 
+        radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(217, 4, 41, 0.08) 0%, transparent 50%);
+}
+
+#app-container {
+    width: 100%;
+    max-width: 960px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+/* RetroArch Top Bar */
+.ra-header {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.ra-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ra-logo {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #d90429, #8d0801);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 14px;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(217, 4, 41, 0.5);
+}
+
+.ra-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.ra-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ra-green);
+    box-shadow: 0 0 8px var(--ra-green);
+}
+
+/* Screen Shell & Canvas Stage */
+.screen-wrapper {
+    position: relative;
+    width: 100%;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    max-height: 70vh;
+}
+
+#nes-canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* CRT Shader Layer */
+.crt-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+}
+
+.crt-vignette {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.8);
+    z-index: 3;
+}
+
+/* OSD Notification Banner */
+#osd-toast {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid var(--ra-accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* Quick Hotbar Controls */
+.quick-hotbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.hotbar-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.hotbar-btn:active, .hotbar-btn.active {
+    background: var(--ra-accent);
+    border-color: var(--ra-accent);
+    color: #fff;
+    transform: translateY(1px);
+}
+
+/* FPS Power Saver Bar */
+.fps-control-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.fps-slider {
+    width: 90px;
+    accent-color: var(--ra-accent);
+    cursor: pointer;
+}
+
+.fps-badge {
+    font-weight: 700;
+    color: var(--ra-green);
+    min-width: 50px;
+}
+
+/* Mobile RetroArch Controller Overlay */
+.touch-overlay {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 12px 8px;
+    gap: 16px;
+    touch-action: none;
+    transition: all 0.3s ease;
+}
+
+/* Virtual D-PAD */
+.dpad-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dpad-btn {
+    position: absolute;
+    background: linear-gradient(180deg, rgba(51, 57, 66, 0.8), rgba(33, 37, 43, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+}
+
+.dpad-btn:active, .dpad-btn.pressed {
+    background: #3b82f6 !important;
+    color: #fff;
+    box-shadow: 0 0 12px #3b82f6;
+}
+
+.dpad-up { top: 6px; width: 44px; height: 50px; }
+.dpad-down { bottom: 6px; width: 44px; height: 50px; }
+.dpad-left { left: 6px; width: 50px; height: 44px; }
+.dpad-right { right: 6px; width: 50px; height: 44px; }
+.dpad-center { width: 36px; height: 36px; background: rgba(26, 29, 36, 0.8); border-radius: 4px; z-index: 1; }
+
+/* Action Buttons Cluster */
+.action-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.turbo-row, .btn-row {
+    display: flex;
+    gap: 12px;
+}
+
+.nes-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(217, 4, 41, 0.85), rgba(155, 4, 30, 0.85));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(217, 4, 41, 0.4);
+    cursor: pointer;
+    touch-action: none;
+}
+
+.nes-btn.turbo {
+    width: 44px;
+    height: 44px;
+    font-size: 12px;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.85), rgba(217, 119, 6, 0.85));
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+}
+
+.nes-btn:active, .nes-btn.pressed {
+    transform: scale(0.92);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* Center Select & Start Pill Buttons */
+.center-pills {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 6px 0;
+}
+
+.pill-btn {
+    background: rgba(39, 42, 48, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f3f4f6;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    touch-action: none;
+    transform: rotate(-12deg);
+}
+
+.pill-btn:active, .pill-btn.pressed {
+    background: #3b82f6;
+    color: #fff;
+}
+
+/* ==============================================================================
+   RETROARCH FULLSCREEN OVERLAY MODE (Alpha 50% Touch Controls directly on top!)
+   ============================================================================== */
+.fullscreen-active {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #000 !important;
+}
+
+.fullscreen-active .ra-header,
+.fullscreen-active .quick-hotbar {
+    display: none !important;
+}
+
+.fullscreen-active .screen-wrapper {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* RetroArch 50% Translucent Touch Overlay in Fullscreen Mode */
+.fullscreen-active .touch-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 50 !important;
+    padding: 24px 20px !important;
+    background: transparent !important;
+    pointer-events: none; /* Let empty space pass through */
+}
+
+/* Alpha 50% Translucency for Controls in Fullscreen Mode */
+.fullscreen-active .dpad-container,
+.fullscreen-active .dpad-btn,
+.fullscreen-active .nes-btn,
+.fullscreen-active .pill-btn {
+    pointer-events: auto !important;
+    opacity: 0.50 !important; /* 50% Alpha Translucency like RetroArch! */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.fullscreen-active .dpad-btn:active, .fullscreen-active .dpad-btn.pressed,
+.fullscreen-active .nes-btn:active, .fullscreen-active .nes-btn.pressed,
+.fullscreen-active .pill-btn:active, .fullscreen-active .pill-btn.pressed {
+    opacity: 0.85 !important;
+}
+
+/* Fullscreen Floating Exit Button */
+#btn-exit-fullscreen {
+    display: none;
+}
+
+.fullscreen-active #btn-exit-fullscreen {
+    display: flex;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 60;
+    pointer-events: auto;
+    opacity: 0.50;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Drawer & Modal Styling for Assembly IDE */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: #181b20;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.modal-header {
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ra-accent);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.asm-editor {
+    width: 100%;
+    height: 280px;
+    background: #0d0e11;
+    color: #e5e7eb;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 13px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    resize: vertical;
+    outline: none;
+}
+
+.cpu-registers-box {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.reg-tag {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 600px) {
+    .dpad-container {
+        width: 120px;
+        height: 120px;
+    }
+    .nes-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 14px;
+    }
+}
